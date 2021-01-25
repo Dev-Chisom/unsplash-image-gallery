@@ -3,10 +3,11 @@
     <div class="content">
       <div class="input__wrapper">
         <input
-          type="text"
-          @key.enter="searched"
-          placeholder="Search for photo..."
-          v-model="search"
+          type="search"
+          placeholder="Search for a photo..."
+          required
+          v-model="search_query"
+          @keyup.enter="HandleSearch"
         />
         <i class="fas fa-search"></i>
       </div>
@@ -26,14 +27,14 @@ export default {
   data() {
     return {
       photos: [],
-      search: '',
+      search_query: '',
       uri: 'https://api.unsplash.com/photos/?client_id=',
       apiKey: process.env.VUE_APP_MAP_KEY,
     };
   },
   created() {
     return axios
-      .get(`${this.uri}${this.apiKey}`)
+      .get(`${this.uri}${this.apiKey}&query=${this.search_query.value}`)
       .then((response) => {
         this.photos = response.data;
         console.log(response.data);
@@ -42,15 +43,22 @@ export default {
         console.log(error);
       });
   },
-  watch: {
-    search(value) {
-      console.log(value);
-    },
-  },
   method: {
-    searched(value) {
-      console.log('enter');
-      this.search = '';
+    HandleSearch(value) {
+      if (photos.value.length > 1) {
+        return axios
+          .get(`${this.uri}${this.apiKey}&query=${this.search_query.value}`)
+          .then((response) => {
+            this.photos = response.data;
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log(data);
+      }
+      search_query.value = '';
     },
   },
 };
