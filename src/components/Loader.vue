@@ -57,7 +57,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .gallery {
   position: absolute;
   top: 10rem;
